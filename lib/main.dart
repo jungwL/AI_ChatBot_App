@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -6,11 +7,15 @@ import 'package:flutter_linkify/flutter_linkify.dart'; // import 확인
 import 'package:url_launcher/url_launcher.dart';    // import 확인
 
 
-const String _apiKey = "APi 키값";
 
-void main() {
+
+void main() async{
+  await dotenv.load(fileName: ".env"); //앱 초기 실행시 .env 파일 로드
   runApp(const GenerativeAiApp());
+  print(dotenv.env['GEMINI_API_KEY']);
 }
+
+String? _apiKey = dotenv.env['GEMINI_API_KEY'];
 
 class GenerativeAiApp extends StatelessWidget {
   const GenerativeAiApp({super.key});
@@ -51,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _model = GenerativeModel(
       model: 'gemini-2.5-flash',
-      apiKey: _apiKey,
+      apiKey: _apiKey!,
       systemInstruction: Content.text(
           """
         당신은 '국립중앙박물관'의 전문 도슨트(안내원)입니다.
@@ -82,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // 👈 2. (요청 2) _sendMessage가 버튼 입력을 받을 수 있도록 수정
+  // 2. (요청 2) _sendMessage가 버튼 입력을 받을 수 있도록 수정
   Future<void> _sendMessage([String? presetMessage]) async {
     // 버튼을 눌렀으면 presetMessage를 사용, 아니면 텍스트필드 값을 사용
     final message = presetMessage ?? _textController.text.trim();
@@ -93,7 +98,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _isLoading = true;
     });
 
-    _textController.clear(); // 👈 버튼을 눌러도 텍스트 필드는 비워줌
+    _textController.clear(); //  버튼을 눌러도 텍스트 필드는 비워줌
     _scrollToBottom();
 
     try {
@@ -145,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  // 👈 3. (요청 2) 추천 질문 버튼 위젯 (신규 추가)
+  //  3. (요청 2) 추천 질문 버튼 위젯 (신규 추가)
   Widget _buildSuggestionChips() {
     // 여기에 표시하고 싶은 질문 버튼들을 넣으세요.
     final suggestions = ['관람료', '입장 시간', '기본 정보', '주차 안내','현재 전시','기념품','오시는 길','편의시설'];
@@ -160,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
           return ActionChip(
             label: Text(text),
             onPressed: () {
-              // 👈 4. (요청 2) 버튼의 텍스트를 _sendMessage로 전달
+              //  4. (요청 2) 버튼의 텍스트를 _sendMessage로 전달
               _sendMessage(text);
             },
             shape: RoundedRectangleBorder(

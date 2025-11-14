@@ -64,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     _model = GenerativeModel(
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.5-flash', //모델명 작성
       apiKey: _apiKey!,
       systemInstruction: Content.text("""
         당신은 '국립중앙박물관'의 전문 도슨트(안내원)입니다.

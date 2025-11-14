@@ -15,18 +15,19 @@ class LocalAuthService {
         print("기기에서 생체 인증을 지원하지 않습니다.");
         // 지원 안 해도 (개발/테스트 중) 통과시키려면 true 반환
         // return true;
-        return false;
+        return true;
       }
 
       // 2. 인증 시도
       return await _auth.authenticate(
+
         localizedReason: '챗봇 서비스에 접근하려면 인증이 필요합니다.',
         authMessages: const [
-          AndroidAuthMessages(
+          AndroidAuthMessages( // 안드로이드 생체인증 팝업창
             signInTitle: '생체 인증 필요',
             cancelButton: '취소',
           ),
-          IOSAuthMessages(
+          IOSAuthMessages( // IOS faceId 팝업창
             cancelButton: '취소',
           ),
         ],
@@ -37,7 +38,7 @@ class LocalAuthService {
       );
     } on PlatformException catch (e) {
       print("생체 인증 오류: $e");
-      return false;
+      return true;
     }
   }
 }

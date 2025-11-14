@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final bool didAuthenticate = await _authService.authenticate();
+    debugPrint('로컬 생체인증 반환값 : ${didAuthenticate}');
 
     if (!mounted) return; // 비동기 작업 후 위젯이 사라졌는지 확인
 
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = false;
     });
 
-    if (didAuthenticate) {
+    if (didAuthenticate) { //
       // 인증 성공 시 ChatScreen으로 이동 (뒤로 가기 불가)
       Navigator.pushReplacement(
         context,
